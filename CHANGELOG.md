@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Decoder::output_video_dimensions` / `output_pixel_format`: the
+  container's `width` × `height` (the bitstream carries none, so it
+  cannot change mid-stream), `Yuv420P`. The planes stay
+  macroblock-padded beyond it.
+
 ### Changed
 
 - **Round 459 — spec/19 applied: exact IDCT, level-domain prediction

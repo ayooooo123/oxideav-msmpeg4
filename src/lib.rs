@@ -135,8 +135,8 @@
 use std::collections::VecDeque;
 
 use oxideav_core::{
-    CodecCapabilities, CodecId, CodecParameters, CodecTag, Error, Frame, Packet, ProbeContext,
-    Result, VideoFrame, VideoPlane,
+    CodecCapabilities, CodecId, CodecParameters, CodecTag, Error, Frame, Packet, PixelFormat,
+    ProbeContext, Result, VideoFrame, VideoPlane,
 };
 use oxideav_core::{CodecInfo, CodecRegistry, Decoder};
 
@@ -627,6 +627,16 @@ impl Decoder for MsMpeg4Decoder {
             return Ok(f);
         }
         Err(Error::NeedMore)
+    }
+
+    /// Every picture has the container's size (the bitstream carries
+    /// none); the planes are macroblock-padded beyond it.
+    fn output_video_dimensions(&self) -> Option<(u32, u32)> {
+        self.dims.map(|d| (d.width, d.height))
+    }
+
+    fn output_pixel_format(&self) -> Option<PixelFormat> {
+        self.dims.map(|_| PixelFormat::Yuv420P)
     }
 
     fn flush(&mut self) -> Result<()> {
